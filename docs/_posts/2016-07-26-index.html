@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Version Control & Data Provenance</title>
+    <meta name="description" content="Clean data is under your control.">
+    
+    <link rel="canonical" href="/vcdp-lesson/">
+
+    <style type="text/css">
+      
+     /**
+ * Reset some basic elements
+ */
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+    margin: 0;
+    padding: 0; }
+
+/**
+ * Basic styling
+ */
+body {
+    font: 400 16px/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #111;
+    background-color: #fdfdfd;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-feature-settings: "kern" 1;
+    -moz-font-feature-settings: "kern" 1;
+    -o-font-feature-settings: "kern" 1;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal; }
+
+/**
+ * Set `margin-bottom` to maintain vertical rhythm
+ */
+h1, h2, h3, h4, h5, h6,
+p, blockquote, pre,
+ul, ol, dl, figure,
+.highlight {
+    margin-bottom: 15px; }
+
+/**
+ * Images
+ */
+img {
+    max-width: 100%;
+    vertical-align: middle; }
+
+/**
+ * Figures
+ */
+figure > img {
+    display: block; }
+
+figcaption {
+    font-size: 14px; }
+
+/**
+ * Lists
+ */
+ul, ol {
+    margin-left: 30px; }
+
+li > ul,
+li > ol {
+    margin-bottom: 0; }
+
+/**
+ * Headings
+ */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+}
+
+/**
+ * Links
+ */
+a {
+    color: #2a7ae2;
+    text-decoration: none; }
+a:visited {
+    color: #1756a9; }
+a:hover {
+    color: #111;
+    text-decoration: underline; }
+
+/**
+ * Blockquotes
+ */
+blockquote {
+    color: #828282;
+    border-left: 4px solid #e8e8e8;
+    padding-left: 15px;
+    font-size: 18px;
+    letter-spacing: -1px;
+    font-style: italic; }
+blockquote > :last-child {
+    margin-bottom: 0; }
+
+/**
+ * Code formatting
+ */
+pre,
+code {
+    font-size: 15px;
+    border: 1px solid #e8e8e8;
+    border-radius: 3px;
+    background-color: #eef; }
+
+code {
+    padding: 1px 5px; }
+
+pre {
+    padding: 8px 12px;
+    overflow-x: auto; }
+pre > code {
+    border: 0;
+    padding-right: 0;
+    padding-left: 0; }
+
+/**
+ * Wrapper
+ */
+.wrapper {
+    max-width: -webkit-calc(800px - (30px * 2));
+    max-width: calc(800px - (30px * 2));
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 30px;
+    padding-left: 30px; }
+
+@media screen and (max-width: 800px) {
+    .wrapper {
+	max-width: -webkit-calc(800px - (30px));
+	max-width: calc(800px - (30px));
+	padding-right: 15px;
+	padding-left: 15px; } }
+
+/**
+ * Clearfix
+ */
+.wrapper:after, .footer-col-wrapper:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+/**
+ * Icons
+ */
+.icon > svg {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle; }
+
+.icon > svg path {
+    fill: #828282; }
+
+/**
+ * Site header
+ */
+.site-header {
+    border-top: 5px solid #424242;
+    border-bottom: 1px solid #e8e8e8;
+    min-height: 56px;
+    position: relative; }
+
+.site-title {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 56px;
+    letter-spacing: -1px;
+    margin-bottom: 0;
+    float: left; }
+.site-title, .site-title:visited {
+    color: #424242; }
+
+.site-nav {
+    float: right;
+    line-height: 56px; }
+.site-nav .menu-icon {
+    display: none; }
+.site-nav .page-link {
+    color: #111;
+    line-height: 1.5; }
+.site-nav .page-link:not(:last-child) {
+    margin-right: 20px; }
+@media screen and (max-width: 600px) {
+    .site-nav {
+	position: absolute;
+	top: 9px;
+	right: 15px;
+	background-color: #fdfdfd;
+	border: 1px solid #e8e8e8;
+	border-radius: 5px;
+	text-align: right; }
+    .site-nav .menu-icon {
+	display: block;
+	float: right;
+	width: 36px;
+	height: 26px;
+	line-height: 0;
+	padding-top: 10px;
+	text-align: center; }
+    .site-nav .menu-icon > svg {
+	width: 18px;
+	height: 15px; }
+    .site-nav .menu-icon > svg path {
+	fill: #424242; }
+    .site-nav .trigger {
+	clear: both;
+	display: none; }
+    .site-nav:hover .trigger {
+	display: block;
+	padding-bottom: 5px; }
+    .site-nav .page-link {
+	display: block;
+	padding: 5px 10px;
+	margin-left: 20px; }
+    .site-nav .page-link:not(:last-child) {
+	margin-right: 0; } }
+
+/**
+ * Site footer
+ */
+.site-footer {
+    border-top: 1px solid #e8e8e8;
+    padding: 30px 0; }
+
+.footer-heading {
+    font-size: 18px;
+    margin-bottom: 15px; }
+
+.contact-list,
+.social-media-list {
+    list-style: none;
+    margin-left: 0; }
+
+.footer-col-wrapper {
+    font-size: 15px;
+    color: #828282;
+    margin-left: -15px; }
+
+.footer-col {
+    float: left;
+    margin-bottom: 15px;
+    padding-left: 15px; }
+
+.footer-col-1 {
+    width: -webkit-calc(35% - (30px / 2));
+    width: calc(35% - (30px / 2)); }
+
+.footer-col-2 {
+    width: -webkit-calc(20% - (30px / 2));
+    width: calc(20% - (30px / 2)); }
+
+.footer-col-3 {
+    width: -webkit-calc(45% - (30px / 2));
+    width: calc(45% - (30px / 2)); }
+
+@media screen and (max-width: 800px) {
+    .footer-col-1,
+    .footer-col-2 {
+	width: -webkit-calc(50% - (30px / 2));
+	width: calc(50% - (30px / 2)); }
+
+    .footer-col-3 {
+	width: -webkit-calc(100% - (30px / 2));
+	width: calc(100% - (30px / 2)); } }
+@media screen and (max-width: 600px) {
+    .footer-col {
+	float: none;
+	width: -webkit-calc(100% - (30px / 2));
+	width: calc(100% - (30px / 2)); } }
+/**
+ * Page content
+ */
+.page-content {
+    padding: 30px 0; }
+
+.page-heading {
+    font-size: 20px; }
+
+.post-list {
+    margin-left: 0;
+    list-style: none; }
+.post-list > li {
+    margin-bottom: 30px; }
+
+.post-meta {
+    font-size: 14px;
+    color: #828282; }
+
+.post-link {
+    display: block;
+    font-size: 24px; }
+
+/**
+ * Posts
+ */
+.post-header {
+    margin-bottom: 30px; }
+
+.post-title {
+    font-size: 42px;
+    letter-spacing: -1px;
+    line-height: 1; }
+@media screen and (max-width: 800px) {
+    .post-title {
+	font-size: 36px; } }
+
+.post-content {
+    margin-bottom: 30px; }
+.post-content h2 {
+    font-size: 32px; }
+@media screen and (max-width: 800px) {
+    .post-content h2 {
+	font-size: 28px; } }
+.post-content h3 {
+    font-size: 26px; }
+@media screen and (max-width: 800px) {
+    .post-content h3 {
+	font-size: 22px; } }
+.post-content h4 {
+    font-size: 20px; }
+@media screen and (max-width: 800px) {
+    .post-content h4 {
+	font-size: 18px; } }
+
+/**
+ * Syntax highlighting styles
+ */
+.highlight {
+    background: #fff; }
+.highlighter-rouge .highlight {
+    background: #eef; }
+.highlight .c {
+    color: #998;
+    font-style: italic; }
+.highlight .err {
+    color: #a61717;
+    background-color: #e3d2d2; }
+.highlight .k {
+    font-weight: bold; }
+.highlight .o {
+    font-weight: bold; }
+.highlight .cm {
+    color: #998;
+    font-style: italic; }
+.highlight .cp {
+    color: #999;
+    font-weight: bold; }
+.highlight .c1 {
+    color: #998;
+    font-style: italic; }
+.highlight .cs {
+    color: #999;
+    font-weight: bold;
+    font-style: italic; }
+.highlight .gd {
+    color: #000;
+    background-color: #fdd; }
+.highlight .gd .x {
+    color: #000;
+    background-color: #faa; }
+.highlight .ge {
+    font-style: italic; }
+.highlight .gr {
+    color: #a00; }
+.highlight .gh {
+    color: #999; }
+.highlight .gi {
+    color: #000;
+    background-color: #dfd; }
+.highlight .gi .x {
+    color: #000;
+    background-color: #afa; }
+.highlight .go {
+    color: #888; }
+.highlight .gp {
+    color: #555; }
+.highlight .gs {
+    font-weight: bold; }
+.highlight .gu {
+    color: #aaa; }
+.highlight .gt {
+    color: #a00; }
+.highlight .kc {
+    font-weight: bold; }
+.highlight .kd {
+    font-weight: bold; }
+.highlight .kp {
+    font-weight: bold; }
+.highlight .kr {
+    font-weight: bold; }
+.highlight .kt {
+    color: #458;
+    font-weight: bold; }
+.highlight .m {
+    color: #099; }
+.highlight .s {
+    color: #d14; }
+.highlight .na {
+    color: #008080; }
+.highlight .nb {
+    color: #0086B3; }
+.highlight .nc {
+    color: #458;
+    font-weight: bold; }
+.highlight .no {
+    color: #008080; }
+.highlight .ni {
+    color: #800080; }
+.highlight .ne {
+    color: #900;
+    font-weight: bold; }
+.highlight .nf {
+    color: #900;
+    font-weight: bold; }
+.highlight .nn {
+    color: #555; }
+.highlight .nt {
+    color: #000080; }
+.highlight .nv {
+    color: #008080; }
+.highlight .ow {
+    font-weight: bold; }
+.highlight .w {
+    color: #bbb; }
+.highlight .mf {
+    color: #099; }
+.highlight .mh {
+    color: #099; }
+.highlight .mi {
+    color: #099; }
+.highlight .mo {
+    color: #099; }
+.highlight .sb {
+    color: #d14; }
+.highlight .sc {
+    color: #d14; }
+.highlight .sd {
+    color: #d14; }
+.highlight .s2 {
+    color: #d14; }
+.highlight .se {
+    color: #d14; }
+.highlight .sh {
+    color: #d14; }
+.highlight .si {
+    color: #d14; }
+.highlight .sx {
+    color: #d14; }
+.highlight .sr {
+    color: #009926; }
+.highlight .s1 {
+    color: #d14; }
+.highlight .ss {
+    color: #990073; }
+.highlight .bp {
+    color: #999; }
+.highlight .vc {
+    color: #008080; }
+.highlight .vg {
+    color: #008080; }
+.highlight .vi {
+    color: #008080; }
+.highlight .il {
+    color: #099; }
+
+/* Table */
+
+table {
+    margin-bottom: 15px;
+}
+
+table th, table td {
+    padding: 5px 10px;
+}
+
+table > thead > .header {
+    background: transparent;
+}
+
+table > thead > tr > td, table > thead > tr > th,
+table > tbody > tr > td, table > tbody > tr > th,
+table > tfoot > tr > td, table > tfoot > tr > th {
+    border: 1px solid #DDD;
+}
+
+table > thead > tr > th,
+table > thead > tr > td {
+    border-bottom-width: 2px;
+}
+
+table tbody > tr:nth-of-type(2n+1) {
+    background-color: #F9F9F9;
+}
+
+
+      
+     p.captioned {
+	 text-align: center;
+     }
+     
+     .captioned em {
+	 font-size: 0.6em;
+     }
+     
+     .ToS {
+	 text-align: right;
+     }
+     
+     .input.highlighter-rouge pre {
+	 background-color: #EBECE4;
+     }
+
+     .input.highlighter-rouge code {
+	 background-color: transparent;
+     }
+
+     .output.highlighter-rouge pre {
+	 background-color: #ECECC7;
+     }
+
+     .output.highlighter-rouge code {
+	 background-color: transparent;
+     }
+
+     .text-document.highlighter-rouge pre {
+	 background-color: #000000;
+     	 border-radius: 0px 0px 5px 5px;
+     }
+     
+     .text-document.highlighter-rouge code {
+	 background-color: transparent;
+	 color: #FFFFFF;
+     }
+     
+     div.text-document::before {
+	 content: attr(title);
+	 font-family:Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, Consolas, Liberation Mono, DejaVu Sans Mono, Courier New, monospace;
+	 font-size: 14px;
+	 color: #000000;
+	 background: #C0C0C0;
+	 padding:8px 15px;
+	 border-radius:5px 5px 0px 0px;
+	 border:1px solid #e5e5e5;
+	 display: block;
+     }     
+    </style>
+    
+</head>
+
+  
+  <body>
+
+    <div class="page-content">
+      <div class="wrapper">
+        
+<p><a name="/slides/title"></a></p>
+
+<h1 id="version-control--data-provenance">Version Control &amp; Data Provenance</h1>
+
+<p>Instructor: Ian Carroll</p>
+
+<p>A centralized workflow involves keeping multiple researchers up to date with the remote project repository. The project is represented as a chain of commits, that modify it step by step. Datasets typically don’t live in the repository, but its good practice to adhere to the same goal of applying a linear chain of “commits” to your data. The practice establishes clear data provenence, or the knowledge of a dataset’s history and ownership.</p>
+
+<p class="ToS"><a href="#/slides/title">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/goals"></a></p>
+
+<h2 id="objectives-for-this-lesson">Objectives for this lesson</h2>
+
+<ul>
+  <li>Understand working with a centralized repository</li>
+  <li>Strategize for keeping your data’s history in full view</li>
+</ul>
+
+<!--split-->
+
+<h2 id="specific-achievements">Specific achievements</h2>
+
+<ul>
+  <li>Synchronize repositories using <code class="highlighter-rouge">git</code></li>
+  <li>Modify tables in a database from <code class="highlighter-rouge">R</code></li>
+</ul>
+
+<p class="ToS"><a href="#/slides/goals">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/collab"></a></p>
+
+<h2 id="review-of-the-centralized-workflow">Review of the Centralized Workflow</h2>
+
+<p>In the model for collaboration on project files introduced previously, individual researchers worked on copies of a shared project repository.</p>
+
+<p><img src="/vcdp-lesson/images/atlassian_workflow.svg" alt="" width="40%" /></p>
+
+<!--split-->
+
+<p>A <strong>commit</strong> is a collection of changes to one or more project files that one person decides to add to the project.</p>
+
+<ul>
+  <li>The <strong>origin</strong> repository holds the published commits to the project.</li>
+  <li>Your local <strong>clone</strong> of the origin shows your working version of the project.</li>
+  <li>You can <strong>pull</strong> commits from the origin to your clone to catch up.</li>
+  <li>You can <strong>push</strong> commits to the origin to share your progress.</li>
+</ul>
+
+<!--split-->
+
+<h3 id="pull">Pull</h3>
+
+<p><img src="/vcdp-lesson/images/atlassian_after_pull.svg" alt="" width="50%" /></p>
+
+<!--split-->
+
+<h3 id="push">Push</h3>
+
+<p><img src="/vcdp-lesson/images/atlassian_after_push.svg" alt="" width="50%" /></p>
+
+<!--split-->
+
+<h3 id="project-history">Project History</h3>
+
+<p>Commits that have made it to the <strong>origin</strong> are displayed on GitHub.</p>
+
+<p>The <a href="https://github.com/itcarroll/test">test repository</a> that I created during our introduction to <code class="highlighter-rouge">git</code> is public, so anyone can look at the history.</p>
+
+<p>A local clone that is up-to-date with the origin will have the same history viewable at the command line with <code class="highlighter-rouge">git log</code>.</p>
+
+<!--split-->
+
+<h3 id="reverting-history">Reverting History</h3>
+
+<p>Any commit to the project can be undone.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>git revert eed1f38
+</code></pre>
+</div>
+
+<p>If you are unlucky enough to fall into the clutches of <code class="highlighter-rouge">vim</code>, you can escape with <code class="highlighter-rouge">ESC :q! RETURN</code>.
+To avoid the editor altogether, pass the <code class="highlighter-rouge">--no-edit</code> argument.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>git revert --no-edit eed1f38
+</code></pre>
+</div>
+
+<!--split-->
+
+<div class="output highlighter-rouge"><pre class="highlight"><code>master [%new commit id%] Revert "adds bullet Point"
+ 1 file changed, 1 deletion(-)
+</code></pre>
+</div>
+
+<p>The command <code class="highlighter-rouge">git revert</code> adds a new commit to the local clone that undoes whatever the specified commit had previously changed.</p>
+
+<!--split-->
+
+<dl>
+  <dt>Question</dt>
+  <dd>What still needs to happen before the bad commit is “officialy” reverted?</dd>
+</dl>
+
+<!--split-->
+
+<h3 id="diverging-repositories">Diverging Repositories</h3>
+
+<p>The <strong>origin</strong> repository and a local <strong>clone</strong> will naturally diverge while you work on your project. This occurs when a person makes commits to a local clone befor pulling commits made by a collaborator that were pushed onto the origin.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>git push
+</code></pre>
+</div>
+
+<div class="output highlighter-rouge"><pre class="highlight"><code>To https://github.com/itcarroll/test.git
+ ! [rejected]        master -&gt; master (fetch first)
+ error: failed to push some refs to 'https://github.com/itcarroll/test.git'
+ hint: Updates were rejected because the remote contains work that you do
+ hint: not have locally. This is usually caused by another repository pushing
+ hint: to the same ref. You may want to first integrate the remote changes
+ hint: (e.g., 'git pull ...') before pushing again.
+</code></pre>
+</div>
+
+<p>Take time to read <code class="highlighter-rouge">git</code> messages – they give good explanations of what to do!</p>
+
+<!--split-->
+
+<p><img src="/vcdp-lesson/images/atlassian_merge.svg" alt="" width="50%" /></p>
+
+<!--split-->
+
+<h3 id="take-the-hint">Take the Hint!</h3>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>git pull
+</code></pre>
+</div>
+
+<div class="output highlighter-rouge"><pre class="highlight"><code>remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), done.
+From https://github.com/itcarroll/test
+   15bc488..26c2dcd  master     -&gt; origin/master
+   Auto-merging README.md
+   Merge made by the 'recursive' strategy.
+    README.md | 1 +
+	1 file changed, 1 insertion(+)
+</code></pre>
+</div>
+
+<!--split-->
+
+<h3 id="merge-works-line-by-line">Merge works Line by Line</h3>
+
+<p>The last message told about changes made by this <strong>merge commit</strong>, which seamlessly integrates changes to the same file by multiple authors.</p>
+
+<p><img src="/vcdp-lesson/images/git_merge_line_by_line.jpg" alt="" width="50%" /></p>
+
+<!--split-->
+
+<dl>
+  <dt>Exercise (option 1)</dt>
+  <dd>Together with your team, get everyone’s local clone up to date with the origin of your <code class="highlighter-rouge">data2doc</code> project repository.</dd>
+  <dt>Exercise (option 2)</dt>
+  <dd>Follow the <a href="https://help.github.com/articles/create-a-repo/">GitHub bootcamp</a> on creating a free <strong>public</strong> GitHub repository.</dd>
+</dl>
+
+<p class="ToS"><a href="#/slides/collab">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/data"></a></p>
+
+<h2 id="storing-the-data-history">Storing the Data History</h2>
+
+<p>Any text document (scripts, notes, reports) will be handled very well by a version control system like <code class="highlighter-rouge">git</code>. Can we keep information about data itself in the same project.</p>
+
+<dl class="fragment">
+  <dt>Option 1</dt>
+  <dd>Small-ish size data can be stored directly in the repository as text. Examples include tabular data in CSV format or spatial data in GeoJSON format.</dd>
+  <dt>Option 2</dt>
+  <dd>The data itself resides outside the project, but data management is done from scripts that are within the project repository. Management can include cleaning, importing and updating data or the design of tables.</dd>
+</dl>
+
+<!--split-->
+
+<div class="text-document highlighter-rouge" title="data-management.R"><pre class="highlight"><code>## Setup
+
+library("RPostgreSQL")
+setwd("%sandbox%")
+
+## Table Creation
+
+drv &lt;- dbDriver("PostgreSQL")
+con &lt;- dbConnect(drv,
+                 dbname="portal",
+                 host="pgstudio.research.sesync.org",
+                 user="student",
+                 password="%password%")
+
+dbGetQuery(con, "BEGIN TRANSACTION")
+
+dbGetQuery(con, "
+DROP TABLE IF EXISTS plots CASCADE;
+")
+
+dbGetQuery(con, "
+CREATE TABLE plots(
+  plot_id INTEGER PRIMARY KEY,
+  plot_type text);
+")
+
+raw_data &lt;- read.csv("data/plots.csv")
+dbWriteTable(con, "plots", raw_data, row.names=FALSE, append=TRUE)
+
+dbCommit(con)
+dbDisconnect(con)
+</code></pre>
+</div>
+
+<!--split-->
+
+<dl>
+  <dt>Exercise</dt>
+  <dd>Recall the notice that came up when the plots table was dropped. It said: <code class="highlighter-rouge">NOTICE:  drop cascades to constraint surveys_plot_id_fkey on table surveys</code>. We need to add the foreign key back after our data is ingested. Modify the script to make that happen. When testing it, source the whole script rather than running individual lines.</dd>
+</dl>
+
+<!--split-->
+
+<p>Maintaining your chain of commits to a database is really clean when you use “Transactions”.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>dbGetQuery(con, "BEGIN TRANSACTION")
+
+... do something ...
+
+dbCommit(con)
+</code></pre>
+</div>
+
+<!--split-->
+
+<p>A transaction is a block of changes that don’t really take effect until being commited. If you get an error during a transaction, safely back out of the changes with <code class="highlighter-rouge">dbRollback</code>.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>Warning message:
+In postgresqlQuickSQL(conn, statement, ...) : Could not create execute
+...
+&gt; dbRollback(con)
+</code></pre>
+</div>
+
+<p>By the way, this is a great example of using the editor for “clean” scripts, but being ready to use the interactive console for one-off commands.</p>
+
+<!--split-->
+
+<p>In the <code class="highlighter-rouge">git</code> repository, we saw that the history of a project – how it got where it is – is a chain of commits. Each commit applies changes to the project in the state resulting from the previous commit.</p>
+
+<p>The best practice is to let your dataset can evolve in the same way.</p>
+
+<div class="input highlighter-rouge"><pre class="highlight"><code>dbGetQuery(con, "BEGIN TRANSACTION")
+
+... make 263rd change to the data ...
+
+dbCommit(con)
+
+dbGetQuery(con, "BEGIN TRANSACTION")
+
+... make 264th change to the data ...
+
+dbCommit(con)
+
+</code></pre>
+</div>
+
+<!--split-->
+
+<h2 id="add-commits-dont-re-write-history">Add commits: don’t re-write history!</h2>
+
+<p>You do not want to change an existing transaction, unless you have time to ensure that all subsequent transactions will do what they were originally intended to do.</p>
+
+<p>You do not have to run the whole script if you introduce a new transaction, although in theory you <em>should be able to.</em> Instead, add the new transaction after you have made it work.</p>
+
+<!--split-->
+
+<p>An example of adding the record of a new commit into <code class="highlighter-rouge">data-management.R</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>dbGetQuery(con, "BEGIN TRANSACTION")
+
+surveyors &lt;- dbReadTables("surveyors")
+dbGetQuery(con, "
+UPDATE surveyor
+SET (first_name, last_name) = ('Joe', 'Maher')
+WHERE person_id = 3;
+")
+
+dbRollback(con)
+</code></pre>
+</div>
+
+<!--split-->
+
+<dl>
+  <dt>Exercise</dt>
+  <dd>Let’s clean up the surveyor table! Take responsibility for your own row(s) or insert a new row. In addition to the ‘UPDATE … SET’ phrase, here are two other helpful SQL snippets.</dd>
+</dl>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>DELETE FROM surveyor WHERE person_id = %an id%
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>INSERT INTO surveyor (a, b, c, ...) VALUES (x, y, z ...)
+</code></pre>
+</div>
+
+<p class="ToS"><a href="#/slides/data">Top of Section</a></p>
+
+<hr />
+
+<p><a name="/slides/summary"></a></p>
+
+<p class="ToS"><a href="#/slides/summary">Top of Section</a></p>
+
+<hr />
+
+
+      </div>
+    </div>
+
+  </body>
+
+</html>

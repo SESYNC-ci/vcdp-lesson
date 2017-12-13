@@ -1,15 +1,20 @@
 # Site
 
-title:
+title: "Version Control & Data Provenance"
 handouts:
-tag:
-lesson:
-instructor:
+tag: v0.0
+lesson: 0
+instructor: Ian Carroll
 authors:
+  - Ian Carroll
 
 # Slides
 
 slide_sorter:
+  - title
+  - goals
+  - collab
+  - data
 
 #####################################
 # Only modify content above or risk #
