@@ -1,4 +1,4 @@
-[![lifecycle](https://img.shields.io/badge/lifecycle-deprecated-blue.svg)](https://github.com/orgs/SESYNC-ci/projects/2)
+[![lifecycle](https://img.shields.io/badge/lifecycle-archived-lightgrey.svg)](https://github.com/orgs/SESYNC-ci/projects/2)
 
 ## Version Control Data Provenence
 
@@ -6,7 +6,7 @@ Using a centralized workflow to keep a history of changes made to datasets.
 
 ## Instructor Notes
 
-Active lessons covering similar material include:
+This lesson is archived. Active lessons covering similar material include:
 
 * [Basic git](https://github.com/sesync-ci/basic-git-lesson)
 * [Introduction to Databases](https://github.com/sesync-ci/introdb-lesson)
